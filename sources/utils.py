@@ -11,7 +11,7 @@ def check_if_rgb(I):
     I: numpy.ndarray
         Image (Height x Width x Channels)
     """
-    if np.any(a > 255) or np.any(a < 0):
+    if np.any(I > 255) or np.any(I < 0):
         return False
     return True
 
@@ -81,3 +81,57 @@ def gaussian_kernel(neighborhood_size=3, sigma=1):
     kernel_raw = np.sqrt(np.outer(kern1d, kern1d))
     kernel = kernel_raw/kernel_raw.sum()
     return kernel
+
+def make_hist(I):
+    """Returns the histogram of the image
+
+    Parameters
+    ----------
+    I: numpy.ndarray
+        Array of size HxWx1
+
+    Returns
+    -------
+    histogram: dict
+        Intensity -> number of pixels where I=Intensity
+    """
+    histogram = {i: 0 for i in range(256)}
+    for intensity in I.astype(int).flatten():
+        histogram[intensity] += intensity
+    return histogram
+
+def find_closest_mode(intensity, D):
+    """Find the closest mode to the pixel value
+
+    Parameters
+    ----------
+    intensity: int
+        Intensity at the pixel
+
+    D: numpy.ndarray
+        Local histogram derivative at pixel
+
+    Returns
+    -------
+    mode: int
+        Closest mode
+    """
+    if D[intensity] > 0:
+        # find the closest mode superior to pixel value
+        for i in range(len(D[intensity:])):
+            if D[i] * D[i+1] < 0: # crossed a mode
+                mode = intensity + i  # Note: we will consider only integer intensities here
+                return mode
+        return intensity  # if no mode was found return identity
+                          # Note: this is an arbitrary choice and may change
+                          # depending on the results
+    else:
+        # find the closest mode inferior to pixel value
+        for j in range(len(D[:intensity])):
+            if D[intensity-j-1] * D[intensity-j] < 0:  # crossed a mode
+                mode = intensity - j
+                return mode
+        return intensity
+
+
+

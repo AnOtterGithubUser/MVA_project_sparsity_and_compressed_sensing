@@ -2,6 +2,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 from utils import K, K_prime
+from closest_mode import closest_mode_filter
 
 
 im = np.array(Image.open("../images/chicago2.png"))
@@ -35,15 +36,20 @@ for intensity in local_hist.keys():
 	else:
 		smoothed_local_hist_derivative += local_hist[intensity] * lookup_K_prime[intensity]
 
+# f = plt.figure(0)
+# plt.imshow(im)
+# plt.title('Original image')
 
-f = plt.figure(1)
-plt.subplot(311)
-plt.bar(local_hist.keys(), local_hist.values())
-plt.title("Local histogram")
-plt.subplot(312)
-plt.plot(smoothed_local_hist)
-plt.title("Smooth local histogram")
-plt.subplot(313)
-plt.plot(smoothed_local_hist_derivative)
-plt.title("Smooth local histogram derivative")
-plt.show()
+# f = plt.figure(1)
+# plt.subplot(311)
+# plt.bar(local_hist.keys(), local_hist.values())
+# plt.title("Local histogram")
+# plt.subplot(312)
+# plt.plot(smoothed_local_hist)
+# plt.title("Smooth local histogram")
+# plt.subplot(313)
+# plt.plot(smoothed_local_hist_derivative)
+# plt.title("Smooth local histogram derivative")
+# plt.show()
+
+I_closest = closest_mode_filter(im_crop, sigma=1)
