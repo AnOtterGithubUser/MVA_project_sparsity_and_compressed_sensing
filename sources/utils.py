@@ -40,7 +40,7 @@ def K(intensity, sigma=1., mu=0.):
     """
     if is_iterable(intensity):  # input is iterable
         return np.array([K(i, sigma, mu) for i in intensity])
-    return (1/(math.sqrt(2*math.pi)*sigma)) * math.exp(-(intensity - mu)**2 / 2*sigma**2)
+    return (1/(math.sqrt(2*math.pi)*sigma)) * math.exp(-(intensity - mu)**2 / (2*sigma**2))
 
 
 def K_prime(intensity, sigma=1., mu=0.):
@@ -59,7 +59,7 @@ def K_prime(intensity, sigma=1., mu=0.):
     """
     if is_iterable(intensity):  # input is iterable
         return np.array([K_prime(i, sigma, mu) for i in intensity])
-    return -((intensity - mu) / (math.sqrt(2*math.pi)*sigma)) * math.exp(-(intensity - mu)**2 / 2*sigma**2)
+    return -((intensity - mu) / (math.sqrt(2*math.pi)*sigma**3)) * math.exp(-(intensity - mu)**2 / (2*sigma**2))
 
 
 def gaussian_kernel(neighborhood_size=3, sigma=1):

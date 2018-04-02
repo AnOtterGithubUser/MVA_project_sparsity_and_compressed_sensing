@@ -6,7 +6,7 @@ from closest_mode import closest_mode_filter
 
 
 im = np.array(Image.open("../images/chicago2.png"))
-im_crop = im[200:210, 200:210, :]
+im_crop = im[200:250, 250:300, :]
 
 # Get the local histogram
 local_hist = {i: 0 for i in range(256)}
@@ -36,20 +36,10 @@ for intensity in local_hist.keys():
 	else:
 		smoothed_local_hist_derivative += local_hist[intensity] * lookup_K_prime[intensity]
 
-# f = plt.figure(0)
-# plt.imshow(im)
-# plt.title('Original image')
-
-# f = plt.figure(1)
-# plt.subplot(311)
-# plt.bar(local_hist.keys(), local_hist.values())
-# plt.title("Local histogram")
-# plt.subplot(312)
-# plt.plot(smoothed_local_hist)
-# plt.title("Smooth local histogram")
-# plt.subplot(313)
-# plt.plot(smoothed_local_hist_derivative)
-# plt.title("Smooth local histogram derivative")
-# plt.show()
-
-I_closest = closest_mode_filter(im_crop, sigma=1)
+I_closest = closest_mode_filter(im, sigma=1, neighborhood_size=3)
+plt.imshow(im)
+plt.title('Original image')
+plt.show()
+plt.imshow(I_closest)
+plt.title("Closest mode filtered")
+plt.show()
